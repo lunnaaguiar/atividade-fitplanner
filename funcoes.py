@@ -153,3 +153,63 @@ def listarExercicios(exercicios, categoria):
 #     # dicionarioTreino["exercicios"] = exerciciosTreino
 #     return exerciciosTreino
 
+
+#Seção controle de metas
+
+def viewGoals():
+    with open("files/goals.txt", "r", encoding='utf-8') as file:
+        fileList = file.readlines()
+
+        if fileList == []:
+            print("Nenhuma meta cadastrada")
+            return
+
+        for i in range(len(fileList)):
+            print(f"{i+1} | {fileList[i].strip()}")
+
+
+def addGoal():
+    goal = input("Qual a meta?")
+    with open("files/goals.txt", "a", encoding='utf-8') as file:
+        file.write(f"{goal}\n")
+
+def editGoal():
+    with open("files/goals.txt", "r", encoding='utf-8') as file:
+        fileList = file.readlines()
+
+        if fileList == []:
+            print("Nenhuma meta cadastrada")
+            return
+
+        for i in range(len(fileList)):
+            print(f"{i+1} | {fileList[i].strip()}")
+
+        opcao = int(input("Qual meta deseja editar? "))
+        goal = input("Qual a nova meta?")
+        fileList[opcao-1] = goal
+
+        with open("files/goals.txt", "w", encoding='utf-8') as file:
+            for i in range(len(fileList)):
+                file.write(f"{fileList[i].strip()}\n")
+
+    print("Meta editada com sucesso!")
+
+def removeGoal():
+    with open("files/goals.txt", "r", encoding='utf-8') as file:
+        fileList = file.readlines()
+
+        if fileList == []:
+            print("Nenhuma meta cadastrada")
+            return
+
+        for i in range(len(fileList)):
+            print(f"{i+1} | {fileList[i].strip()}")
+
+        opcao = int(input("Qual meta deseja excluir? "))
+        fileList.pop(opcao-1)
+
+        with open("files/goals.txt", "w", encoding='utf-8') as file:
+            for i in range(len(fileList)):
+                file.write(f"{fileList[i].strip()}\n")
+
+    print("Meta excluida com sucesso!")
