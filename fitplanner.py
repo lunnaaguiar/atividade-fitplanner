@@ -392,3 +392,17 @@ while True:
                 removeGoal()
             elif opcaoMeta == 0:
                 break
+    elif opcao == 4:
+        while True:
+            print("----Evolução----")
+            print("1 - Ver evolução")
+            print("0 - Voltar")
+            print()
+
+            opcaoEvolucao = int(input("> > Opção: "))
+            print()
+
+            if opcaoEvolucao == 1:
+                viewEvolution()
+            elif opcaoEvolucao == 0:
+                break

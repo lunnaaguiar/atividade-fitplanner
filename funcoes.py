@@ -182,6 +182,16 @@ def editGoal():
 
         for i in range(len(fileList)):
             print(f"{i+1} | {fileList[i].strip()}")
+        
+        markAsDone = input("Você deseja assinalar alguma como conclúida? (s/n) ")
+        if markAsDone == "s":
+            opcao = int(input("Qual meta deseja assinalar como concluida? "))
+            fileList[opcao-1] = f"[X] {fileList[opcao-1].strip()}"
+            with open("files/goals.txt", "w", encoding='utf-8') as file:
+                for i in range(len(fileList)):
+                    file.write(f"{fileList[i].strip()}\n")
+            return
+
 
         opcao = int(input("Qual meta deseja editar? "))
         goal = input("Qual a nova meta?")
@@ -212,3 +222,19 @@ def removeGoal():
                 file.write(f"{fileList[i].strip()}\n")
 
     print("Meta excluida com sucesso!")
+
+
+#Evolution section
+
+def viewEvolution():
+    with open("files/goals.txt", "r", encoding='utf-8') as file:
+        goalsList = file.readlines()
+
+        for i in range(len(goalsList)):
+            if "[X]" in goalsList[i]:
+                print("----Metas concluidas----")
+                print(f"{i+1} | {goalsList[i].strip()}")
+                print("------------------------")
+    
+    with open("files/treinos.csv", "r", encoding='utf-8') as file:
+        treinoList = file.readlines()
