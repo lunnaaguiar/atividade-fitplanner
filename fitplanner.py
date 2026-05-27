@@ -1,171 +1,17 @@
 import os
 os.system('cls' if os.name == 'nt' else 'clear')
+
+from funcoes import *
 # make it work  make it right  make it fast
-# criar arquivos importantes! - - -
 
-# arquivos = ["cardio.txt", "forca.txt", "flexibilidade.txt", "equilibrio.txt"]
-# path = "file/exercicios"
-# for nome in arquivos:
-#     if not os.path.exists(f"{path}/{nome}"):
-#         open(f"{path}/{nome}", "w").close()
-# - - - - - - - - - - - - - - -
+# criar arquivos importantes! // exercícios - - -
+inicializarArquivos()
 
-def menu():
-  print("1 - Treinos")
-  print("2 - Exercícios")
-  print("3 - Metas")
-  print("4 - Evolução")
-  print("5 - Sugestões")
-  print("0 - Sair")
-  print()
-  opcao = int(input("Insira a opção desejada: "))
-  return opcao
-
-def menuTreino():
-    print("- - - - TREINOS - - - -")
-    print("1 - Novo treino")
-    print("2 - Ver treinos")
-    print("3 - Editar treino")
-    print("4 - Excluir treino")
-    print("0 - Voltar")
-    print()
-    opcao = int(input("> > Opção: "))
-    print()
-    return opcao
-
-def menuExercicio():
-    print("- - - - EXERCÍCIOS - - - -")
-    print("1 - Adicionar exercício novo")
-    print("2 - Ver exercícios")
-    print("3 - Editar")
-    print("4 - Excluir exercício")
-    print("0 - Voltar")
-    print()
-    opcao = int(input("> > Opção: "))
-    print()
-    return opcao
-
-def categoriaExercicio():
-    print("- - - Categorias - - -")
-    print("1 - Aeróbicos (cardio)")
-    print("2 - Força (resistência)")
-    print("3 - Flexibilidade/alongamento")
-    print("4 - Equilíbrio")
-    print("0 - Voltar")
-    print()
-    categoria = int(input("Selecione uma categoria: "))
-    # return categoria
-    if categoria == 1:
-        return "cardio.txt"
-    elif categoria == 2:
-        return "forca.txt"
-    elif categoria == 3:
-        return "flexibilidade.txt"
-    elif categoria == 4:
-        return "equilibrio.txt"
-    elif categoria == 0:
-        return 0
-    else:
-        print("\n- Opção inválida -")
-        return "invalido" # trocar por inválida
-
-def salvarArquivo(caminho, dicionario, textos): # Salvar como .TXT
-    numeroArquivo = len((os.listdir(caminho)))
-    
-    arquivo = open(f"{caminho}/dados_{numeroArquivo+1}", "w", encoding="utf-8")
-    for texto, valor in zip(textos, dicionario.values()):
-        arquivo.write(f"{texto}{valor}\n")
-    arquivo.close()
-    return arquivo
-
-def renomearArquivo(caminho):
-    if not os.path.exists("files/treinos"):
-        os.makedirs("files/treinos")
-    arquivos = sorted(os.listdir(caminho))
-    for i, arquivo in enumerate(arquivos, start=1):
-        os.rename(f"{caminho}/{arquivo}", f"{caminho}/dados_{i}.txt")
-        
-def mostrarArquivos(caminho, tipo): # treinos e exercícios
-    arquivos = sorted(os.listdir(caminho))
-    
-    for i in range(len(arquivos)):
-        arquivo = open(f"{caminho}/dados_{i+1}.txt", "r")
-        nome = arquivo.readline().split()
-        print(f"{tipo} {i+1} |", *nome[1:])
-
-def mostrarArquivo(caminho, numArquivo):
-    arquivo = open(f"{caminho}/dados_{numArquivo}.txt", "r")
-    conteudo = arquivo.read()
-    print("- - - - - - - - - - - -")
-    print(conteudo.strip())
-    print("- - - - - - - - - - - -")
-
-def editarArquivo(caminho, numArquivo, textos):
-    arquivo = open(f"{caminho}/dados_{numArquivo}.txt", "r")
-    linhas = arquivo.readlines()
-    arquivo.close()
-
-    print("- - - - -")
-    for i, linha in enumerate(linhas, start=1):
-        print(f"[{i}] {linha.strip()}")
-    print("- - - - -")
-
-    editar = int(input(f"Qual linha deseja editar? [1-{len(linhas)}] "))
-    novaLinha = input("Novo texto: ")
-    linhas[editar-1] = textos[editar-1]+novaLinha+"\n"
-
-    arquivo = open(f"{caminho}/dados_{numArquivo}.txt", "w")
-    arquivo.writelines(linhas)
-    arquivo.close()
-    
-    print("Editado com sucesso!")    
-    return arquivo
-
-def apagarArquivo(caminho, numArquivo):
-    os.remove(f"{caminho}/dados_{numArquivo}.txt")
-
-### Exercícios ###
-
-def atualizarExercicios(path, categoria, listaExercicios):
-    arquivo = open(f"{path}/{categoria}", "w") # removi .txt
-
-    for i in range(len(listaExercicios)):
-        arquivo.write(f"{listaExercicios[i].strip()}\n") # precisa do .strip() pra apagar  aquebra de linha '\n' e adicionar de novo
-    arquivo.close()
-
-def addExercicio(path, categoria, exercicios, exercicio):
-    exercicios.append(exercicio)
-    arquivo = open(f"{path}/{categoria}", "w") # removi .txt
-    for i in range(len(exercicios)):
-        arquivo.write(f"{exercicios[i].strip()}\n") # precisa do .strip() pra apagar  aquebra de linha '\n' e adicionar de novo
-    arquivo.close()
-    print()
-    print(f"[{exercicio}] foi adicionado!")
-
-def abrirExercicios(path, categoria):
-    arquivo = open(f"{path}/{categoria}", "r") # removi .txt
-    exercicios = arquivo.readlines()
-    arquivo.close()
-
-    return exercicios
-
-def listarExercicios(exercicios):
-    # título
-    if categoria == "cardio.txt":
-        print(" > Aeróbicos <")
-    elif categoria == "forca.txt":
-        print(" > Força <")
-    elif categoria == "flexibilidade.txt":
-        print(" > Flexibilidade <")
-    elif categoria == "equilibrio.txt":
-        print(" > Equilíbrio <")
-    
-    # lisa dos exercícios
-    if len(exercicios) > 0:
-        for i in range(len(exercicios)):
-            print(f"{i+1} | {exercicios[i].strip()}") # print de cada linha do arquivo
-    else: 
-        print("Sem exercícios cadastrados")
+# [ importante ]
+# - ajeitar os 'print()' pra quebra de linha 
+# - criar funções da manipulação de arquivos .csv
+# - colocar verificação se o arquivo existe ou está vazio
+# - falta colocar a visualização e edição dos exercícios // mas eles estão salvos
 
 
 
@@ -173,76 +19,246 @@ while True:
     opcao = menu()
 
     if opcao == 1:
-        path = path = "files/treinos"
+        # consertar esse path // está no modelo antigo do.txt 
+        path = "files/treinos"
+        arquivoTreinos = "treinos.csv"
     elif opcao == 2:
-        path = path = "files/exercicios"
+        path = "files/exercicios"
 
     # - - - - > TREINOS
     if opcao == 1:
         while True:
-            textos = ["Nome: ", "Tipo [categoria]: ", "Duração (em minutos): ", "Objetivo: ", "Observações: "]
-
             opcaoTreino = menuTreino()
-            renomearArquivo(path) # organiza todos os arquivos
 
             if opcaoTreino == 1: # add
                 dicionarioTreino = {}
 
                 print("- Adicionar treino novo -")
                 # print("(Digite 0 a qualquer momento para cancelar)\n") # Adicionar isso aqui
+                try:
+                    dicionarioTreino = {
+                    'nome':       input("Nome: ").capitalize(),
+                    'tipo':       input("Tipo [categoria]: ").capitalize(),
+                    'duracao':    float(input("Duração (em minutos): ")),
+                    'objetivo':   input("Objetivo: ").capitalize(),
+                    'observacao': input("Observações: ").capitalize(),
+                    'exercicios': ""
+                    }
+                except ValueError:
+                    print("Entrada inválida. Tente novamente.")
+                    continue
+                
+                print("1 - Sim | 0 - Não") # Deseja adicionar exercícios?
+                # TRY EXCEPET
+                opcaoExercicios = int(input("Deseja adicionar exercícios ao seu treino?"))
+                if opcaoExercicios == 1:
+                    listaExercicios = []
+                    while True:
+                        categoria = categoriaExercicio()
+                        if categoria == 0:
+                            break
+                        exercicios = abrirExercicios("files/exercicios", categoria)
+                        temExercicio = listarExercicios(exercicios, categoria)
+                        if temExercicio == False:
+                            continue
 
-                dicionarioTreino = {
-                'nome':       input("Nome: "),
-                'tipo':       input("Tipo [categoria]: "),
-                'duracao':    float(input("Duração (em minutos): ")),
-                'objetivo':   input("Objetivo: "),
-                'observacao': input("Observações: ")
-                }
+                        # exerciciosTreino = addListaExercicio(categoria, listaExercicios) 
+                        # >>> pular linha !
+                        numeroExercicio = int(input("Qual exercício deseja adicionar?"))
 
-                treinoTag = ["Nome: ", "Tipo [categoria]: ", "Duração (em minutos): ", "Objetivo: ", "Observações: "]
-                salvarArquivo(path, dicionarioTreino, treinoTag) # criar .txt
+                        if numeroExercicio == 0: # voltar
+                            break
+                        indiceExercicio = numeroExercicio-1
+                        listaExercicios.append(exercicios[indiceExercicio])
+                        print(f"'{exercicios[indiceExercicio]}' foi adicionado ao treino!")
+
+                        print("1 - Sim | 0 - Não")
+                        continuar = int(input("Deseja adicionar mais um exercício?"))
+                        if continuar == 1:
+                            continue
+                        elif continuar == 0:
+                            break
+
+                    # formata os exercicios (linha)    
+                    for i in range(len(listaExercicios)):
+                        listaExercicios[i] = listaExercicios[i].strip()
+                    exerciciosTreino = "-".join(listaExercicios)
+                    dicionarioTreino["exercicios"] = exerciciosTreino
+                        
+                        
+                
+                # adicionar no .csv
+                dicionarioTreino["duracao"] = str(dicionarioTreino["duracao"]) # conversão float -> string // transforma a lista em string
+                colunas = ",".join(list(dicionarioTreino.keys()))+"\n" # transforma a lista de chaves em uma string - separando por vírgulas + quebra de linha
+                dados = ",".join(list(dicionarioTreino.values()))+"\n" # valores do dicionário -> string + quebra de linha 
+                
+                print(f"{path}/{arquivoTreinos}") ####
+                if os.path.exists(f"{path}/{arquivoTreinos}"): # adiciona
+                    arquivo = open(f"{path}/{arquivoTreinos}", "a", encoding='utf-8')
+                    arquivo.write(dados)
+                    arquivo.close()
+                else: # not os.path.exists(f"{path}/{arquivoTreinos}") # se não existe, cria (com etiquetas)
+                    arquivo = open(f"{path}/{arquivoTreinos}", "w", encoding='utf-8')
+                    arquivo.write(colunas)
+                    arquivo.write(dados)
+                    arquivo.close()
+
+
                 print("Treino salvo!")
 
             elif opcaoTreino == 2: # mostrar
                 while True:
                     print("- Ver treinos -")
-                    mostrarArquivos(path, "Treino")
+
+                    if not os.path.exists(f"{path}/{arquivoTreinos}"):
+                        print("Nenhum treino encontrado.")
+                        break
+                    
+                    # transformar isso em função e corrigir os path!!!
+                    # mostrar arquivos // falta incluir se não existir nenhum treino ou arquivo (.csv)    
+                    arquivo = open(f"{path}/{arquivoTreinos}", "r", encoding='utf-8')
+                    colunas = arquivo.readline()
+                    linhas = arquivo.readlines()
+                    arquivo.close()
+
+                    if not linhas:
+                        print("Nenhum treino encontrado.")
+                        break
+
+                    # print
+                    print("Treinos")
+                    for i, linha in enumerate(linhas, start=1):
+                        categorias = linha.split(",")
+                        print(f"Treino {i} | {categorias[0]}")
+
                     print(">>> 0 - Sair")
+
+                    formatacao = ["Nome do treino:", "Tipo/Categoria:", "Duração:", "Objetivo:", "Observações:"]
                     opcao = int(input("Qual treino deseja visualizar? "))
-                    if opcao <= len((os.listdir(path))) and opcao > 0:
-                        mostrarArquivo(path, opcao)
+
+                    if opcao <= len(linhas) and opcao > 0:
+                        linha = linhas[opcao-1].split(",")
+                        print(f"- Treino {opcao} -")
+                        for i in range(len(formatacao)): # quantidade de elementos
+                            print(f"{formatacao[i]} {linha[i].strip()}")
                     elif opcao == 0:
                         break
                     else: 
                         print("Opção inválida.\n")
-
               
             elif opcaoTreino == 3: # editar
                 while True: 
                     print("- Editar treinos - ")
-                    mostrarArquivos(path, "Treinos")
-                    print("\n0 - Sair")
-                    numArquivo = int(input("Selecione o número do arquivo: "))
-                    if numArquivo == 0: # ??
+                    if not os.path.exists(f"{path}/{arquivoTreinos}"):
+                        print("Nenhum treino encontrado.")
                         break
-                    editarArquivo(path, numArquivo, textos)
+                        
+                    arquivo = open(f"{path}/{arquivoTreinos}", "r", encoding='utf-8')
+                    colunas = arquivo.readline()
+                    linhas = arquivo.readlines()
+                    arquivo.close()
+
+                    if not linhas:
+                        print("Nenhum treino encontrado.")
+                        break
+                    
+                    # listar arquivos [ vai virar função ]
+                    print("Treinos")
+                    for i, linha in enumerate(linhas, start=1):
+                        categorias = linha.split(",")
+                        print(f"Treino {i} | {categorias[0]}")
+                        
+                    # organizar essa parte: 
+                    opcao = int(input("Qual treino deseja editar? "))
+                    if opcao <= len(linhas) and opcao > 0:
+                        indiceTreino = opcao-1
+                        categorias = linhas[indiceTreino].strip().split(",")
+                        formatacao = ["Nome do treino:", "Tipo/Categoria:", "Duração:", "Objetivo:", "Observações:"]
+                        for i in range(len(formatacao)):
+                            print(f"{i+1} | {formatacao[i]} {categorias[i]}")
+                            
+                        print(">>> 0 - Sair")
+                        opcaoCategoria = int(input("Qual categoria deseja editar?"))
+                        
+                        if opcaoCategoria <= len(categorias) and opcaoCategoria > 0:
+                            indiceCategoria = opcaoCategoria-1
+                            novoTexto = input(f"{formatacao[indiceCategoria]} ")
+                            categorias[indiceCategoria] = novoTexto
+                            # confirmacao = int(input(""))
+                            categoria_str = ",".join(categorias)
+                            linhas[indiceTreino] = categoria_str + "\n"
+                            
+                            arquivo = open(f"{path}/{arquivoTreinos}", "w", encoding='utf-8')
+                            arquivo.write(colunas)
+                            for i in range(len(linhas)):
+                                arquivo.write(linhas[i])   
+                            arquivo.close()      
+                        elif opcaoCategoria == 0:
+                            break
+                        else:
+                           print("Opção inválida") 
+                            
+                    elif opcao == 0:
+                        break
+                    else: 
+                        print("Opção inválida.\n")    
+                    
 
             elif opcaoTreino == 4: # excluir
-                print("- Excluir arquivo -")
-                mostrarArquivos(path, "Treino")
-                numArquivo = int(input("Qual arquivo deseja excluir? "))
-                mostrarArquivo(path, numArquivo)
-                print(f"Tem certeza que deseja apagar o Treino {numArquivo}")
-                print("1 - Sim | 0 - Não")
-                delete = int(input("[1/0]: "))
-                if delete == 1:
-                    apagarArquivo(path, numArquivo)
-                    print("O Treino foi deletado.")
-                elif delete == 0:
-                    print("Cancelado! O arquivo não foi deletado.")
+                while True:
+                    print("- Excluir arquivo -")
                 
-                else:
-                    print("Opção inválida!")
+                    if not os.path.exists(f"{path}/{arquivoTreinos}"):
+                        print("Nenhum treino encontrado.")
+                        break
+                        
+                    arquivo = open(f"{path}/{arquivoTreinos}", "r", encoding='utf-8')
+                    colunas = arquivo.readline()
+                    linhas = arquivo.readlines()
+                    arquivo.close()
+
+                    if not linhas:
+                        print("Nenhum treino encontrado.")
+                        break
+                    # listar arquivos
+                    print("Treinos")
+                    for i, linha in enumerate(linhas, start=1):
+                        categorias = linha.split(",")
+                        print(f"Treino {i} | {categorias[0]}")
+                    opcao = int(input("Qual arquivo deseja excluir? "))
+                                            
+                    # mostrar arquivo
+                    print(">>> 0 - Sair")
+
+                    formatacao = ["Nome do treino:", "Tipo/Categoria:", "Duração:", "Objetivo:", "Observações:"]
+                    if opcao <= len(linhas) and opcao > 0:
+                        linha = linhas[opcao-1].split(",")
+                        print(f"- Treino {opcao} -")
+                        for i in range(5): # quantidade de elementos
+                            print(f"{formatacao[i]} {linha[i].strip()}")
+                    elif opcao == 0:
+                        break
+                    else: 
+                        print("Opção inválida.\n")
+                    
+                    
+                    print(f"Tem certeza que deseja apagar o Treino {opcao}")
+                    print("1 - Sim | 0 - Não")
+                    delete = int(input("[1/0]: "))
+                    if delete == 1:
+                        indice = opcao-1
+                        linhas.pop(indice)
+                        arquivo = open(f"{path}/{arquivoTreinos}", "w", encoding='utf-8')
+                        arquivo.write(colunas)
+                        for i in range(len(linhas)):
+                            arquivo.write(linhas[i]) 
+                        arquivo.close()                       
+                        print("O Treino foi deletado.")
+                    elif delete == 0:
+                        print("Cancelado! O arquivo não foi deletado.")
+                    
+                    else:
+                        print("Opção inválida!")
 
 
             elif opcaoTreino == 0:
@@ -283,7 +299,7 @@ while True:
                         continue # pula o print, reinicia o loop
 
                     exercicios = abrirExercicios(path, categoria)
-                    listarExercicios(exercicios)
+                    listarExercicios(exercicios, categoria)
 
             elif opcaoExercicio == 3: # editar exercícios
                 while True:
@@ -299,7 +315,7 @@ while True:
 
                     exercicios = abrirExercicios(path, categoria)
                     print("Qual exercício deseja editar?")
-                    listarExercicios(exercicios)
+                    listarExercicios(exercicios, categoria)
                     print()
                     indice = int(input("Exercício nº: "))-1
                     novoExercicio = input("Novo texto: ").capitalize() # editar
@@ -326,7 +342,7 @@ while True:
                     exercicios = abrirExercicios(path, categoria)
                     # deletar
                     print("Qual exercício deseja deletar?")
-                    listarExercicios(exercicios)
+                    listarExercicios(exercicios, categoria)
                     print()
                     indice = int(input("Exercício nº: "))-1
 
@@ -352,4 +368,27 @@ while True:
                 print("break")
                 break
 
+#-----> Controle de metas
+    elif opcao == 3:
+        while True:
+            print("----Controle de metas----")
+            print("1 - Ver metas")
+            print("2 - Adicionar meta")
+            print("3 - Editar meta")
+            print("4 - Excluir meta")
+            print("0 - Voltar")
+            print()
 
+            opcaoMeta = int(input("> > Opção: "))
+            print()
+
+            if opcaoMeta == 1:
+                viewGoals()
+            elif opcaoMeta == 2:
+                addGoal()
+            elif opcaoMeta == 3:
+                editGoal()
+            elif opcaoMeta == 4:
+                removeGoal()
+            elif opcaoMeta == 0:
+                break
