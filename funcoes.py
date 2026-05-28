@@ -10,6 +10,7 @@ arquivoTreinos = "treinos.csv"
 def inicializarArquivos():
     os.makedirs(pathTreinos, exist_ok=True)
     os.makedirs(pathExercicios, exist_ok=True)
+    os.makedirs(pathMetas, exist_ok=True)
     for nome in ["cardio.txt", "forca.txt", "flexibilidade.txt", "equilibrio.txt"]:
         caminho = f"{pathExercicios}/{nome}"
         if not os.path.exists(caminho):
@@ -141,15 +142,217 @@ def listarExercicios(exercicios, categoria):
         print("Sem exercícios cadastrados")
         return False
 
-# def addListaExercicio(categoria, listaExercicios):
-#     exercicios = abrirExercicios("files/exercicios", categoria)
-#     numeroExercicio = int(input("Qual exercício deseja adicionar?"))
-#     indiceExercicio = numeroExercicio-1
-#     listaExercicios.append(exercicios[indiceExercicio])
-#     print(f"'{exercicios[indiceExercicio]}' foi adicionado ao treino!")
-#     for i in range(len(listaExercicios)):
-#         listaExercicios[i] = listaExercicios[i].strip()
-#     exerciciosTreino = "-".join(listaExercicios)
-#     # dicionarioTreino["exercicios"] = exerciciosTreino
-#     return exerciciosTreino
+# Seção controle de metas  ============================================
 
+# variáveis metas
+pathMetas = "files/metas"
+arquivoMetas = "metas.csv"
+colunasMetas = "tipo,descricao,valor_alvo,valor_atual,unidade\n"
+
+# Inicializar arquivos
+def inicializarMetas():
+    os.makedirs(pathMetas, exist_ok=True)
+    caminho = f"{pathMetas}/{arquivoMetas}"
+    if not os.path.exists(caminho):
+        with open(caminho, "w", encoding='utf-8') as f:
+            f.write(colunasMetas)
+
+# ======================================================================
+
+def lerMetas():
+    caminho = f"{pathMetas}/{arquivoMetas}"
+    if not os.path.exists(caminho):
+        return []
+    with open(caminho, "r", encoding='utf-8') as f:
+        f.readline()  # pula o cabeçalho
+        linhas = f.readlines()
+    metas = []
+    for linha in linhas:
+        partes = linha.strip().split(",")
+        if len(partes) == 5:
+            metas.append({
+                "tipo":        partes[0],
+                "descricao":   partes[1],
+                "valor_alvo":  float(partes[2]),
+                "valor_atual": float(partes[3]),
+                "unidade":     partes[4]
+            })
+    return metas
+ 
+def salvarMetas(metas):
+    caminho = f"{pathMetas}/{arquivoMetas}"
+    with open(caminho, "w", encoding='utf-8') as f:
+        f.write(colunasMetas)
+        for m in metas:
+            linha = f"{m['tipo']},{m['descricao']},{m['valor_alvo']},{m['valor_atual']},{m['unidade']}\n"
+            f.write(linha)
+
+def barraProgresso(atual, alvo, tipo, tamanho=20):
+    # Calcula e exibe a barra de progresso conforme o tipo de meta.
+    if tipo == "perder peso":
+        # progresso = quanto já perdeu em relação ao quanto quer perder
+        # valor_atual vai diminuindo
+        progresso = alvo / atual if atual > 0 else 1
+        progresso = min(progresso, 1.0)
+    else:
+        # metas de ganho: progresso = atual / alvo
+        progresso = atual / alvo if alvo > 0 else 0
+        progresso = min(progresso, 1.0)
+ 
+    feito = int(progresso * tamanho)
+    barra = "█" * feito + "░" * (tamanho - feito)
+    return f"[{barra}] {progresso*100:.1f}%"
+
+# manipulação e inputs
+ 
+def exibirMeta(i, m):
+    print(f"\n  Meta {i+1}")
+    print(f"  Tipo:      {m['tipo'].capitalize()}")
+    print(f"  Descrição: {m['descricao']}")
+    print(f"  Alvo:      {m['valor_alvo']} {m['unidade']}")
+    print(f"  Atual:     {m['valor_atual']} {m['unidade']}")
+    print(f"  Progresso: {barraProgresso(m['valor_atual'], m['valor_alvo'], m['tipo'])}")
+ 
+def menuTipoMeta():
+    print("  Tipo de meta:")
+    print("  1 - Perder peso")
+    print("  2 - Ganhar massa muscular")
+    print("  3 - Melhorar condicionamento físico")
+    print("  4 - Outro")
+    opcao = int(input("  > Opção: "))
+    tipos = {
+        1: ("perder peso", "kg"),
+        2: ("ganhar massa", "kg"),
+        3: ("condicionamento", "treinos"),
+        4: ("outro", "")
+    }
+    if opcao in tipos:
+        return tipos[opcao]
+    return ("outro", "")
+
+# ===============================================================
+# Parte de Pedro
+
+def viewGoals():
+    metas = lerMetas()
+    if not metas:
+        print("  Nenhuma meta cadastrada.")
+        return
+    print(f"\n  {'='*40}")
+    print("  SUAS METAS")
+    print(f"  {'='*40}")
+    for i, m in enumerate(metas):
+        exibirMeta(i, m)
+    print()
+ 
+def addGoal():
+    print("\n  - Adicionar nova meta -")
+    try:
+        tipo, unidade_padrao = menuTipoMeta()
+        descricao = input("  Descrição da meta: ").capitalize()
+        valor_alvo = float(input(f"  Valor alvo ({unidade_padrao if unidade_padrao else 'unidade'}): "))
+        valor_atual = float(input(f"  Valor atual ({unidade_padrao if unidade_padrao else 'unidade'}): "))
+ 
+        if not unidade_padrao:
+            unidade = input("  Unidade (ex: kg, km, min): ")
+        else:
+            unidade = unidade_padrao
+ 
+        nova_meta = {
+            "tipo":        tipo,
+            "descricao":   descricao,
+            "valor_alvo":  valor_alvo,
+            "valor_atual": valor_atual,
+            "unidade":     unidade
+        }
+ 
+        metas = lerMetas()
+        metas.append(nova_meta)
+        salvarMetas(metas)
+        print("\n  Meta adicionada com sucesso!")
+        exibirMeta(len(metas)-1, nova_meta)
+ 
+    except ValueError:
+        print("  Entrada inválida. Tente novamente.")
+ 
+def editGoal():
+    metas = lerMetas()
+    if not metas:
+        print("  Nenhuma meta cadastrada.")
+        return
+ 
+    print("\n  - Editar meta - ")
+    for i, m in enumerate(metas):
+        exibirMeta(i, m)
+ 
+    try:
+        opcao = int(input("\n  Qual meta deseja editar? (0 para voltar): "))
+        if opcao == 0:
+            return
+        if opcao < 1 or opcao > len(metas):
+            print("  Opção inválida.")
+            return
+ 
+        m = metas[opcao - 1]
+        print(f"\n  Editando: {m['descricao']}")
+        print("  1 - Atualizar valor atual (registrar progresso)")
+        print("  2 - Editar valor alvo")
+        print("  3 - Editar descrição")
+        print("  0 - Voltar")
+ 
+        sub = int(input("  > Opção: "))
+ 
+        if sub == 1:
+            novo = float(input(f"  Novo valor atual ({m['unidade']}): "))
+            metas[opcao - 1]["valor_atual"] = novo
+            salvarMetas(metas)
+            print("\n  Progresso atualizado!")
+            exibirMeta(opcao - 1, metas[opcao - 1])
+ 
+        elif sub == 2:
+            novo = float(input(f"  Novo valor alvo ({m['unidade']}): "))
+            metas[opcao - 1]["valor_alvo"] = novo
+            salvarMetas(metas)
+            print("  Valor alvo atualizado!")
+ 
+        elif sub == 3:
+            nova = input("  Nova descrição: ").capitalize()
+            metas[opcao - 1]["descricao"] = nova
+            salvarMetas(metas)
+            print("  Descrição atualizada!")
+ 
+    except ValueError:
+        print("  Entrada inválida.")
+ 
+def removeGoal():
+    metas = lerMetas()
+    if not metas:
+        print("  Nenhuma meta cadastrada.")
+        return
+ 
+    print("\n  - Excluir meta -")
+    for i, m in enumerate(metas):
+        print(f"  {i+1} | {m['descricao']} ({m['tipo']})")
+ 
+    try:
+        opcao = int(input("\n  Qual meta deseja excluir? (0 para voltar): "))
+        if opcao == 0:
+            return
+        if opcao < 1 or opcao > len(metas):
+            print("  Opção inválida.")
+            return
+ 
+        meta_removida = metas[opcao - 1]
+        print(f"\n  Tem certeza que deseja excluir '{meta_removida['descricao']}'?")
+        print("  1 - Sim | 0 - Não")
+        confirma = int(input("  [1/0]: "))
+ 
+        if confirma == 1:
+            metas.pop(opcao - 1)
+            salvarMetas(metas)
+            print("  Meta excluída com sucesso!")
+        else:
+            print("  Cancelado!")
+ 
+    except ValueError:
+        print("  Entrada inválida.")

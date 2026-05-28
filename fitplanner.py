@@ -369,3 +369,27 @@ while True:
                 break
 
 
+#-----> Controle de metas
+    elif opcao == 3:
+        while True:
+            print("----Controle de metas----")
+            print("1 - Ver metas")
+            print("2 - Adicionar meta")
+            print("3 - Editar meta")
+            print("4 - Excluir meta")
+            print("0 - Voltar")
+            print()
+
+            opcaoMeta = int(input("> > Opção: "))
+            print()
+
+            if opcaoMeta == 1:
+                viewGoals()
+            elif opcaoMeta == 2:
+                addGoal()
+            elif opcaoMeta == 3:
+                editGoal()
+            elif opcaoMeta == 4:
+                removeGoal()
+            elif opcaoMeta == 0:
+                break
