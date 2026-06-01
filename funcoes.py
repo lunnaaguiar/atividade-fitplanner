@@ -200,7 +200,7 @@ def barraProgresso(atual, alvo, tipo, tamanho=20):
         progresso = min(progresso, 1.0)
  
     feito = int(progresso * tamanho)
-    barra = "█" * feito + "░" * (tamanho - feito)
+    barra = "█" * feito + "░" * (tamanho - feito) # barrinha do progresso
     return f"[{barra}] {progresso*100:.1f}%"
 
 # manipulação e inputs
