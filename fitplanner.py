@@ -368,7 +368,10 @@ while True:
                 print("break")
                 break
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f3b3f26d95711f4b67dd709f3cd1b347f5f52ed8
 #-----> Controle de metas
     elif opcao == 3:
         while True:
