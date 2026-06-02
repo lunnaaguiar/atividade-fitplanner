@@ -1,4 +1,5 @@
 import os
+import datetime
 
 # inicializar arquivos
 
@@ -17,7 +18,7 @@ def inicializarArquivos():
 
 ####
  
-def menu():
+def menu(dateNow = "01"):
     try:
         print("1 - Treinos")
         print("2 - Exercícios")
@@ -27,6 +28,18 @@ def menu():
         print("0 - Sair")
         print()
         opcao = int(input("Insira a opção desejada: "))
+        dateTimeNow = datetime.datetime.now()
+        if dateNow != dateTimeNow.strftime and dateNow != "01":
+            with open("files/treinos/treinos.csv", "r", encoding='utf-8') as file:
+                treinoList = file.readlines()
+                for i in range(len(treinoList)):
+                    if "[X]" in treinoList[i]:
+                        treinoList[i] = f"{treinoList[i].strip()}"
+                        with open("files/treinos/treinos.csv", "w", encoding='utf-8') as file:
+                            for i in range(len(treinoList)):
+                                file.write(f"{treinoList[i].strip()}\n")
+
+                
         return opcao
     except ValueError:
         print("Opção inválida.")
@@ -236,5 +249,10 @@ def viewEvolution():
                 print(f"{i+1} | {goalsList[i].strip()}")
                 print("------------------------")
     
-    with open("files/treinos.csv", "r", encoding='utf-8') as file:
+    with open("files/treinos/treinos.csv", "r", encoding='utf-8') as file:
         treinoList = file.readlines()
+        for i in range(len(treinoList)):
+            if "[X]" in treinoList[i]:
+                print("--- Treino concluidos----")
+                print(f"{i+1} | {treinoList[i].strip()}")
+                print("------------------------")

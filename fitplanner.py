@@ -1,5 +1,8 @@
 import os
+import datetime
 os.system('cls' if os.name == 'nt' else 'clear')
+dateNow = "01"
+streakCount = 0
 
 from funcoes import *
 # make it work  make it right  make it fast
@@ -16,7 +19,7 @@ inicializarArquivos()
 
 
 while True:
-    opcao = menu()
+    opcao = menu(dateNow)
 
     if opcao == 1:
         # consertar esse path // está no modelo antigo do.txt 
@@ -156,6 +159,8 @@ while True:
                     arquivo = open(f"{path}/{arquivoTreinos}", "r", encoding='utf-8')
                     colunas = arquivo.readline()
                     linhas = arquivo.readlines()
+                    print("Cabeçalho:", repr(colunas))
+                    print("Linhas:", repr(linhas))
                     arquivo.close()
 
                     if not linhas:
@@ -166,37 +171,64 @@ while True:
                     print("Treinos")
                     for i, linha in enumerate(linhas, start=1):
                         categorias = linha.split(",")
-                        print(f"Treino {i} | {categorias[0]}")
-                        
-                    # organizar essa parte: 
-                    opcao = int(input("Qual treino deseja editar? "))
-                    if opcao <= len(linhas) and opcao > 0:
-                        indiceTreino = opcao-1
-                        categorias = linhas[indiceTreino].strip().split(",")
-                        formatacao = ["Nome do treino:", "Tipo/Categoria:", "Duração:", "Objetivo:", "Observações:"]
-                        for i in range(len(formatacao)):
-                            print(f"{i+1} | {formatacao[i]} {categorias[i]}")
-                            
-                        print(">>> 0 - Sair")
-                        opcaoCategoria = int(input("Qual categoria deseja editar?"))
-                        
-                        if opcaoCategoria <= len(categorias) and opcaoCategoria > 0:
-                            indiceCategoria = opcaoCategoria-1
-                            novoTexto = input(f"{formatacao[indiceCategoria]} ")
-                            categorias[indiceCategoria] = novoTexto
-                            # confirmacao = int(input(""))
-                            categoria_str = ",".join(categorias)
-                            linhas[indiceTreino] = categoria_str + "\n"
-                            
+                        if "[X]" in linhas:
+                            print(f"Treino {i} | {categorias[0]} [X]")
+                        else:
+                            print(f"Treino {i} | {categorias[0]}")
+                    
+                    ##Mark training as done
+                    doneTraining = input("Deseja marcar algum treino como concluído? (s/n) ")
+
+                    if doneTraining == "s":
+                        opcao = int(input("Qual treino deseja marcar como concluido? "))
+                        if opcao <= len(linhas) and opcao > 0:
                             arquivo = open(f"{path}/{arquivoTreinos}", "w", encoding='utf-8')
                             arquivo.write(colunas)
+                            dateNow = datetime.datetime.now().strftime("%d")
                             for i in range(len(linhas)):
-                                arquivo.write(linhas[i])   
-                            arquivo.close()      
-                        elif opcaoCategoria == 0:
+                                if i == opcao-1:
+                                    arquivo.write("[X]")
+                                    streakCount = streakCount + 1
+                                    pass
+                                arquivo.write(linhas[i])
+                            arquivo.close()
+                            print("Marcado como concluido!")
+                            
                             break
                         else:
-                           print("Opção inválida") 
+                            print("Opção inválida.")
+                            break
+                        
+                    # organizar essa parte: 
+                    elif doneTraining == "n":
+                        opcao = int(input("Qual treino deseja editar? "))
+                        if opcao <= len(linhas) and opcao > 0:
+                            indiceTreino = opcao-1
+                            categorias = linhas[indiceTreino].strip().split(",")
+                            formatacao = ["Nome do treino:", "Tipo/Categoria:", "Duração:", "Objetivo:", "Observações:"]
+                            for i in range(len(formatacao)):
+                                print(f"{i+1} | {formatacao[i]} {categorias[i]}")
+                                
+                            print(">>> 0 - Sair")
+                            opcaoCategoria = int(input("Qual categoria deseja editar?"))
+                            
+                            if opcaoCategoria <= len(categorias) and opcaoCategoria > 0:
+                                indiceCategoria = opcaoCategoria-1
+                                novoTexto = input(f"{formatacao[indiceCategoria]} ")
+                                categorias[indiceCategoria] = novoTexto
+                                # confirmacao = int(input(""))
+                                categoria_str = ",".join(categorias)
+                                linhas[indiceTreino] = categoria_str + "\n"
+                                
+                                arquivo = open(f"{path}/{arquivoTreinos}", "w", encoding='utf-8')
+                                arquivo.write(colunas)
+                                for i in range(len(linhas)):
+                                    arquivo.write(linhas[i])   
+                                arquivo.close()      
+                            elif opcaoCategoria == 0:
+                                break
+                            else:
+                                print("Opção inválida") 
                             
                     elif opcao == 0:
                         break
@@ -404,5 +436,7 @@ while True:
 
             if opcaoEvolucao == 1:
                 viewEvolution()
+
+                print(f"Streak: {streakCount} dias")
             elif opcaoEvolucao == 0:
                 break
