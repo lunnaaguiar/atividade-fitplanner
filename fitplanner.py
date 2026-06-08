@@ -19,7 +19,6 @@ while True:
     opcao = menu()
 
     if opcao == 1:
-        # consertar esse path // está no modelo antigo do.txt 
         path = "files/treinos"
         arquivoTreinos = "treinos.csv"
     elif opcao == 2:
@@ -393,3 +392,11 @@ while True:
                 removeGoal()
             elif opcaoMeta == 0:
                 break
+
+# --> EVOLUÇÃO
+    elif opcao == 4:
+        menuEvolucao()
+
+# -- > SUGESTÕES
+    elif opcao == 5:
+        menuSugestoes()
