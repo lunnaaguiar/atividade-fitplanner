@@ -43,3 +43,30 @@ Escolha a categoria, veja a lista, informe o número do exercício e digite o no
 
 4. **Excluir exercício**  
 Selecione a categoria, o número do exercício e confirme a exclusão com 1 (Sim) ou 0 (Não).
+
+
+₊⊹  3 -    TREINOS        ₊⊹  
+⏔⏔⏔⏔⏔⏔ ꒰ ᧔ෆ᧓ ꒱ ⏔⏔⏔⏔⏔⏔  
+
+1. **Ver metas**
+Exibe todas as metas com tipo, descrição, valores e barra de progresso atualizada.
+
+2. **Adicionar meta**
+Escolha o tipo (perder peso, ganhar massa, condicionamento ou outro), informe a descrição, valor alvo e valor atual. A unidade é preenchida automaticamente conforme o tipo.
+
+3. **Editar meta**
+Permite atualizar o valor atual (registrar progresso), o valor alvo ou a descrição da meta.
+
+4. **Excluir meta**
+Remove a meta permanentemente após confirmação.
+
+₊⊹  4 -    EVOLUÇÃO       ₊⊹  
+⏔⏔⏔⏔⏔⏔ ꒰ ᧔ෆ᧓ ꒱ ⏔⏔⏔⏔⏔⏔  
+
+1. **Ver evolução geral**
+Mostra um relatório completo: total de treinos, duração total e média, frequência semanal com barra visual, os 5 últimos treinos realizados e o progresso de todas as metas cadastradas.  
+*Frequência semanal: exibida por semana do ano. Ex: "Sem. 23/2026: ███ (3 treinos)".*
+
+2. **Registrar treino realizado**
+Informe a data (dd/mm/aaaa) ou pressione Enter para usar a data de hoje, o nome do treino e a duração em minutos. O registro é salvo no histórico.
+*Importante: registrar aqui é diferente de criar um treino no menu 1. Aqui você marca que fez um treino naquele dia.*
