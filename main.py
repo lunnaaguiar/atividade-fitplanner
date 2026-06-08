@@ -86,7 +86,7 @@ while True:
                 break
 
     # - - - - > EXERCÍCIOS
-    elif opcao == 2:
+    elif opcao == 2: # exercício
         while True:
             opcaoExercicio = menuExercicio() # MENU
 
@@ -149,7 +149,7 @@ while True:
                     exercicios = abrirExercicios(pathExercicios, categoria)
                     temExercicio = listarExercicios(exercicios, categoria)
                     if temExercicio == True:
-                        deletarExercicio(pathExercicios, categoria, exercicios)
+                        excluirExercicio(pathExercicios, categoria, exercicios)
 
             elif opcaoExercicio == 0: # sair
                 break
@@ -157,7 +157,28 @@ while True:
     ######
     # - - - - > METAS
     elif opcao == 3:
-        print("metas")
+        while True:
+            print("----Controle de metas----")
+            print("1 - Ver metas")
+            print("2 - Adicionar meta")
+            print("3 - Editar meta")
+            print("4 - Excluir meta")
+            print("0 - Voltar")
+            print()
+
+            opcaoMeta = int(input("> > Opção: "))
+            print()
+
+            if opcaoMeta == 1:
+                visualizarMetas()
+            elif opcaoMeta == 2:
+                adicionarMeta()
+            elif opcaoMeta == 3:
+                editarMeta()
+            elif opcaoMeta == 4:
+                excluirMeta()
+            elif opcaoMeta == 0:
+                break
     # - - - - > EVOLUÇÃO
     elif opcao == 4:
         print("evolução")
