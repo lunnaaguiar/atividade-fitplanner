@@ -179,15 +179,11 @@ while True:
                 excluirMeta()
             elif opcaoMeta == 0:
                 break
-    # - - - - > EVOLUÇÃO
+
+# --> EVOLUÇÃO
     elif opcao == 4:
-        print("evolução")
-    # - - - - > SUGESTÕES
+        menuEvolucao()
+
+# -- > SUGESTÕES
     elif opcao == 5:
-        print("sugestões")
-    elif opcao == 0:
-        break
-    # IA
-    # elif opcao == 6:
-    #     arquivo = 'files/treinos/treinos.csv'
-    #     falar_com_agente(arquivo, "fitplanner")
+        menuSugestoes()
