@@ -30,7 +30,7 @@ Exibe os detalhes do treino escolhido e pede confirmação antes de apagar. Oper
 
 ₊⊹  2 -    EXERCÍCIOS      ₊⊹  
 ⏔⏔⏔⏔⏔⏔ ꒰ ᧔ෆ᧓ ꒱ ⏔⏔⏔⏔⏔⏔  
-Os exercícios são organizados em 4 categorias: Aeróbico (cardio), Força, Flexibilidade e Equilíbrio.  
+*Os exercícios são organizados em 4 categorias: Aeróbico (cardio), Força, Flexibilidade e Equilíbrio.*  
 
 1. **Adicionar exercício**  
 Escolha a categoria e informe o nome do exercício. Ele é adicionado ao final da lista daquela categoria.
