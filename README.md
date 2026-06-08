@@ -68,5 +68,5 @@ Mostra um relatório completo: total de treinos, duração total e média, frequ
 *Frequência semanal: exibida por semana do ano. Ex: "Sem. 23/2026: ███ (3 treinos)".*
 
 2. **Registrar treino realizado**
-Informe a data (dd/mm/aaaa) ou pressione Enter para usar a data de hoje, o nome do treino e a duração em minutos. O registro é salvo no histórico.
+Informe a data (dd/mm/aaaa) ou pressione Enter para usar a data de hoje, o nome do treino e a duração em minutos. O registro é salvo no histórico.  
 *Importante: registrar aqui é diferente de criar um treino no menu 1. Aqui você marca que fez um treino naquele dia.*
