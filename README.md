@@ -2,8 +2,8 @@
 CESAR School CC 1B  
 ﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌
 
-  ₊⊹  INICIANDO O PROGRAMA: ₊⊹  
-      ⏔⏔⏔ ꒰ ᧔ෆ᧓ ꒱ ⏔⏔⏔  
+₊⊹  INICIANDO O PROGRAMA: ₊⊹  
+⏔⏔⏔⏔⏔ ꒰ ᧔ෆ᧓ ꒱ ⏔⏔⏔⏔⏔  
 
 1. Abra o terminal na pasta do projeto (onde estão fitplanner.py e funcoes.py).
 
