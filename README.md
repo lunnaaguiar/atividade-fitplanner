@@ -84,4 +84,12 @@ Lista 6 exercícios sugeridos com séries/repetições para o grupo escolhido: c
 Exibe 7 dicas sobre sono, descanso ativo, grupos musculares, hidratação, alongamento pós-treino, semana de deload e sinais de overtraining.
 
 4. **Dicas de alimentação**  
-Dicas de nutrição personalizadas por objetivo (perda de peso, ganho de massa ou saúde geral), cobrindo calorias, proteínas, carboidratos, horários de refeições e alimentos recomendados.  
+Dicas de nutrição personalizadas por objetivo (perda de peso, ganho de massa ou saúde geral), cobrindo calorias, proteínas, carboidratos, horários de refeições e alimentos recomendados.
+
+₊⊹  6 -    IMC       ₊⊹  
+⏔⏔⏔⏔⏔⏔ ꒰ ᧔ෆ᧓ ꒱ ⏔⏔⏔⏔⏔⏔  
+*Insira os valores pedidos e calcule o seu Índice de Massa Corporal!*  
+
+₊⊹  7 -    Reset       ₊⊹  
+⏔⏔⏔⏔⏔⏔ ꒰ ᧔ෆ᧓ ꒱ ⏔⏔⏔⏔⏔⏔ 
+*Destinado para caso você queira remover todas as informações salvas. Todos os arquivos serão resetados ao padrão inicial.
