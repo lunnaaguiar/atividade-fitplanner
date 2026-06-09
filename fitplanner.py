@@ -158,26 +158,95 @@ while True:
     # - - - - > METAS
     elif opcao == 3:
         while True:
-            print("----Controle de metas----")
-            print("1 - Ver metas")
-            print("2 - Adicionar meta")
-            print("3 - Editar meta")
-            print("4 - Excluir meta")
-            print("0 - Voltar")
-            print()
+            opcaoMeta = menuMeta()
 
-            opcaoMeta = int(input("> > Opção: "))
-            print()
+            if opcaoMeta == 1: # add
+                dicionarioMeta = {}
 
-            if opcaoMeta == 1:
-                visualizarMetas()
-            elif opcaoMeta == 2:
-                adicionarMeta()
-            elif opcaoMeta == 3:
-                editarMeta()
-            elif opcaoMeta == 4:
-                excluirMeta()
-            elif opcaoMeta == 0:
+                print("- Adicionar nova meta -")
+                resultado = tipoMeta()
+                if resultado == 0:
+                    continue
+                elif resultado == "invalido":
+                    continue
+                tipo, unidadePadrao = resultado
+
+                try:
+                    descricao = input("- Descrição: ").capitalize()
+                    valorAlvo = float(input(f"- Valor alvo ({unidadePadrao if unidadePadrao else 'unidade'}): "))
+                    valorAtual = float(input(f"- Valor atual ({unidadePadrao if unidadePadrao else 'unidade'}): "))
+                    print()
+
+                    # validação de sentido dos valores
+                    if tipo == "perder peso":
+                        if valorAtual < valorAlvo:
+                            print("Valores incorretos.")
+                            print()
+                            continue
+                    elif tipo == "ganhar massa":
+                        if valorAtual > valorAlvo:
+                            print("Valores incorretos.")
+                            print()
+                            continue
+
+                    if not unidadePadrao:
+                        unidade = input("- Unidade (ex: kg, km, min): ")
+                    else:
+                        unidade = unidadePadrao
+
+                    dicionarioMeta = {
+                        'tipo':        tipo,
+                        'descricao':   descricao,
+                        'valorAlvo':   valorAlvo,
+                        'valorAtual':  valorAtual,
+                        'unidade':     unidade
+                    }
+                except ValueError:
+                    print("Entrada inválida. Tente novamente.")
+                    print()
+                    continue
+
+                salvarMeta(pathMetas, arquivoMetas, dicionarioMeta)
+
+            elif opcaoMeta == 2: # mostrar
+                while True:
+                    # os.system('cls' if os.name == 'nt' else 'clear')
+                    print("- Ver metas -")
+
+                    metas = listarMetas(pathMetas, arquivoMetas)
+                    if metas == False: # não existe
+                        break
+                    meta = mostrarMeta(pathMetas, arquivoMetas)
+                    if meta == "break":
+                        print()
+                        break
+
+            elif opcaoMeta == 3: # editar
+                while True:
+                    print("- Editar metas - ")
+
+                    metas = listarMetas(pathMetas,arquivoMetas)
+                    if metas == False:
+                        break
+                    edicao = editarMeta(pathMetas, arquivoMetas)
+                    if edicao == 0:
+                        break
+
+            elif opcaoMeta == 4: # excluir
+                while True:
+                    print("- Excluir meta -")
+
+                    metas = listarMetas(pathMetas,arquivoMetas)
+                    if metas == False: # não existe
+                        break
+
+                    deletar = excluirMeta(pathMetas, arquivoMetas)
+                    if deletar == 0:
+                        break
+            elif opcaoMeta == 5:
+                atualizarProgressoMeta(pathMetas, arquivoMetas)
+                
+            elif opcaoMeta == 0: # sair
                 break
 
 # --> EVOLUÇÃO
@@ -187,6 +256,10 @@ while True:
 # -- > SUGESTÕES
     elif opcao == 5:
         menuSugestoes()
+## break ##    
+    elif opcao == 0:
+        print("Programa encerrado.")
+        break
 
 # -- > IMC
     elif opcao == 6:
