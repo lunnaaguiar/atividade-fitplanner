@@ -260,3 +260,11 @@ while True:
     elif opcao == 0:
         print("Programa encerrado.")
         break
+
+# -- > IMC
+    elif opcao == 6:
+        calcularIMC()
+
+# -- > RESET
+    elif opcao == 7:
+        resetarDados()
