@@ -70,3 +70,18 @@ Mostra um relatório completo: total de treinos, duração total e média, frequ
 2. **Registrar treino realizado**
 Informe a data (dd/mm/aaaa) ou pressione Enter para usar a data de hoje, o nome do treino e a duração em minutos. O registro é salvo no histórico.  
 *Importante: registrar aqui é diferente de criar um treino no menu 1. Aqui você marca que fez um treino naquele dia.*
+
+₊⊹  4 -    SUGESTÕES       ₊⊹  
+⏔⏔⏔⏔⏔⏔ ꒰ ᧔ෆ᧓ ꒱ ⏔⏔⏔⏔⏔⏔  
+
+1. **Sugestão de treino semanal**  
+Gera um plano de divisão semanal personalizado. Você informa o objetivo (emagrecer, ganhar massa, condicionamento ou saúde geral) e quantos dias por semana pode treinar. O sistema monta a semana com dias, atividades e descansos.  
+
+2. **Sugestão de exercícios por objetivo**  
+Lista 6 exercícios sugeridos com séries/repetições para o grupo escolhido: cardio, força superior, força inferior, core/equilíbrio ou flexibilidade.  
+
+3. **Dicas de descanso e recuperação**  
+Exibe 7 dicas sobre sono, descanso ativo, grupos musculares, hidratação, alongamento pós-treino, semana de deload e sinais de overtraining.
+
+4. **Dicas de alimentação**  
+Dicas de nutrição personalizadas por objetivo (perda de peso, ganho de massa ou saúde geral), cobrindo calorias, proteínas, carboidratos, horários de refeições e alimentos recomendados.  
