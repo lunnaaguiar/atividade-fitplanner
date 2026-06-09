@@ -1562,7 +1562,7 @@ def dicasAlimentacao():
     print()
 
 def excluirMeta():
-    metas = lerMetas()
+    metas = listarMetas()
     if not metas:
         print("  Nenhuma meta cadastrada.")
         return
@@ -1586,7 +1586,7 @@ def excluirMeta():
  
         if confirma == 1:
             metas.pop(opcao - 1)
-            salvarMetas(metas)
+            salvarMeta(metas)
             print("  Meta excluída com sucesso!")
         else:
             print("  Cancelado!")
