@@ -256,3 +256,7 @@ while True:
 # -- > SUGESTÕES
     elif opcao == 5:
         menuSugestoes()
+## break ##    
+    elif opcao == 0:
+        print("Programa encerrado.")
+        break

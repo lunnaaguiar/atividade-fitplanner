@@ -40,6 +40,7 @@ def menu():
         print("Entrada inválida.")
         print("Insira apeenas números.")
         print()
+        return ""
 
 def menuTreino():
     try:
@@ -58,6 +59,7 @@ def menuTreino():
     except ValueError:
         print("Opção inválida.")
         print()
+        return 0
 
 def menuExercicio():
     try:
@@ -76,6 +78,7 @@ def menuExercicio():
     except ValueError:
         print("Opção inválida.")
         print()
+        return 0
 
 def categoriaExercicio():
     try:
@@ -585,10 +588,6 @@ def excluirTreino(pathTreino, arquivoTreino):
         except ValueError:
             print("Entrada inválida! Digite um número!")
             print()
-        return True
-    else: 
-        print("Sem exercícios cadastrados")
-        return False
 
 # Seção controle de metas  ============================================
 
@@ -837,8 +836,8 @@ def editarMeta(pathMeta, arquivoMeta):
                             print()
                             continue
                     
-                    dadosMeta[indiceDado] = str(novaInformacao)
-                    break
+                dadosMeta[indiceDado] = str(novaInformacao)
+                break
             else:
                 print("Opção inválida!")
         except ValueError:
