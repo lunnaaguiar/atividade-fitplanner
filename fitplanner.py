@@ -187,3 +187,11 @@ while True:
 # -- > SUGESTÕES
     elif opcao == 5:
         menuSugestoes()
+
+# -- > IMC
+    elif opcao == 6:
+        calcularIMC()
+
+# -- > RESET
+    elif opcao == 7:
+        resetarDados()

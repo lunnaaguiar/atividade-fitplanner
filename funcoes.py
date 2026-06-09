@@ -26,14 +26,14 @@ def menu():
         print("3 - Metas")
         print("4 - Evolução")
         print("5 - Sugestões")
-        # print("6 - API TEST")
-        # print("7 - Configurações") // deletar tudo
+        print("6 - Calcular IMC")
+        print("7 - Resetar dados")
         print("0 - Sair")
         print()
         opcao = int(input("Insira a opção desejada: "))
-        if opcao < 0 or opcao > 5:
+        if opcao < 0 or opcao > 7:
             print("Opção inválida")
-        print()
+            return None
         return opcao
     except ValueError:
         print("Opção inválida.")
@@ -1342,3 +1342,111 @@ def excluirMeta():
  
     except ValueError:
         print("  Entrada inválida.")
+
+# ===============================================================
+# Seção IMC (opção 6)
+
+def calcularIMC():
+    print(f"\n  {'='*40}")
+    print("  CALCULADORA DE IMC")
+    print(f"  {'='*40}")
+    try:
+        peso = float(input("\n  Seu peso atual (kg): "))
+        altura = float(input("  Sua altura (ex: 1.75): "))
+        if peso <= 0 or altura <= 0:
+            print("  Valores inválidos.")
+            return
+
+        imc = peso / (altura ** 2)
+
+        if imc < 18.5:
+            classificacao = "Abaixo do peso"
+            dica = "Considere aumentar a ingestão calórica com alimentos nutritivos."
+        elif imc < 25.0:
+            classificacao = "Peso normal"
+            dica = "Parabéns! Mantenha hábitos saudáveis de exercício e alimentação."
+        elif imc < 30.0:
+            classificacao = "Sobrepeso"
+            dica = "Atividade física regular e dieta equilibrada podem ajudar."
+        elif imc < 35.0:
+            classificacao = "Obesidade grau I"
+            dica = "Recomenda-se acompanhamento médico e atividade física regular."
+        elif imc < 40.0:
+            classificacao = "Obesidade grau II"
+            dica = "Busque orientação médica e nutricional."
+        else:
+            classificacao = "Obesidade grau III"
+            dica = "Procure acompanhamento médico especializado."
+
+        print(f"\n  IMC calculado: {imc:.2f}")
+        print(f"  Classificação: {classificacao}")
+        print(f"\n  Tabela de referência (OMS):")
+        faixas = [
+            ("< 18.5",      "Abaixo do peso"),
+            ("18.5 – 24.9", "Peso normal    "),
+            ("25.0 – 29.9", "Sobrepeso      "),
+            ("30.0 – 34.9", "Obesidade I    "),
+            ("35.0 – 39.9", "Obesidade II   "),
+            (">= 40.0",     "Obesidade III  "),
+        ]
+        for faixa, nome in faixas:
+            marcador = " <<" if nome.strip().lower() in classificacao.lower() else "   "
+            print(f"    {faixa:<14} {nome}{marcador}")
+        print(f"\n  Dica: {dica}")
+    except ValueError:
+        print("  Entrada inválida. Use ponto como separador decimal (ex: 1.75).")
+    print()
+
+
+# ===============================================================
+# Seção Reset (opção 7)
+
+def resetarDados():
+    print(f"\n  {'='*40}")
+    print("  RESETAR TODOS OS DADOS")
+    print(f"  {'='*40}")
+    print("\n  ATENÇÃO: esta ação apaga permanentemente:")
+    print("    - Todos os treinos")
+    print("    - Todos os exercícios de todas as categorias")
+    print("    - Todas as metas")
+    print("    - Todo o histórico de evolução")
+    print("\n  Essa ação NÃO pode ser desfeita!")
+    print()
+    try:
+        confirmacao1 = input("  Digite RESETAR para confirmar (ou Enter para cancelar): ").strip()
+        if confirmacao1.upper() != "RESETAR":
+            return
+
+        confirma2 = int(input("  Tem absoluta certeza? (1 - Sim | 0 - Não): "))
+        if confirma2 != 1:
+            print("  Cancelado. Nenhum dado foi apagado.")
+            return
+
+        # Apagar treinos
+        caminho_treinos = f"{pathTreinos}/{arquivoTreinos}"
+        if os.path.exists(caminho_treinos):
+            with open(caminho_treinos, "w", encoding="utf-8") as f:
+                f.write("nome,tipo,duracao,objetivo,observacao,exercicios\n")
+
+        # Apagar exercícios
+        for cat in ["cardio.txt", "forca.txt", "flexibilidade.txt", "equilibrio.txt"]:
+            caminho_cat = f"{pathExercicios}/{cat}"
+            if os.path.exists(caminho_cat):
+                open(caminho_cat, "w", encoding="utf-8").close()
+
+        # Apagar metas
+        caminho_metas = f"{pathMetas}/{arquivoMetas}"
+        if os.path.exists(caminho_metas):
+            with open(caminho_metas, "w", encoding="utf-8") as f:
+                f.write(colunasMetas)
+
+        # Apagar evolução
+        caminho_evolucao = f"{pathEvolucao}/{arquivoEvolucao}"
+        if os.path.exists(caminho_evolucao):
+            with open(caminho_evolucao, "w", encoding="utf-8") as f:
+                f.write(colunasEvolucao)
+
+        print("\n  Todos os dados foram apagados. O sistema foi resetado.")
+    except ValueError:
+        print(" Entrada inválida. Reset cancelado.")
+    print()
