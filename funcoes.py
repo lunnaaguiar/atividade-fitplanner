@@ -37,8 +37,11 @@ def menu():
             return None
         return opcao
     except ValueError:
-        print("Opção inválida.")
         print()
+        print("Entrada inválida.")
+        print("Insira apeenas números.")
+        print()
+        return ""
 
 def menuTreino():
     try:
@@ -50,11 +53,14 @@ def menuTreino():
         print("0 - Voltar")
         print()
         opcao = int(input("> > Opção: "))
+        if opcao < 0 or opcao > 5:
+            print("> > Opção inválida! Selecione um número entre 0-4.")
         print()
         return opcao
     except ValueError:
         print("Opção inválida.")
         print()
+        return 0
 
 def menuExercicio():
     try:
@@ -66,11 +72,14 @@ def menuExercicio():
         print("0 - Voltar")
         print()
         opcao = int(input("> > Opção: "))
+        if opcao < 0 or opcao > 5:
+            print("> > Opção inválida! Selecione um número entre 0-4.")
         print()
         return opcao
     except ValueError:
         print("Opção inválida.")
         print()
+        return 0
 
 def categoriaExercicio():
     try:
@@ -213,7 +222,7 @@ def excluirExercicio(pathExercicio, categoria, exercicios):
                 print()
         except ValueError:
             print()
-            print("Entrada inválida!")
+            print("Entrada inválida! Digite um número!")
             print()
     while True:
         try:
@@ -272,6 +281,10 @@ def listarTreinos(path, arquivo):
 def mostrarTreino(path,file, opcao):
     formatacao = ["Nome do treino:", "Tipo/Categoria:", "Duração:", "Objetivo:", "Observações:"]
 
+    if not os.path.exists(f"{path}/{file}"):
+        print("Arquivo de treinos não encontrado.")
+        return ""
+
     arquivo = open(f"{path}/{file}", "r", encoding='utf-8')
     colunas = arquivo.readline()
     linhas = arquivo.readlines()
@@ -280,40 +293,38 @@ def mostrarTreino(path,file, opcao):
     try:
         print(">>> 0 - Sair")
         opcao = int(input("Qual treino deseja visualizar? "))
+        indiceTreino = opcao-1
         if opcao <= len(linhas) and opcao > 0:
-            treino = linhas[opcao-1].strip().split(",")
+            treino = linhas[indiceTreino].strip().split(",")
             print()
             print("- - - - - -")
             print(f"- Treino {opcao} -")
-            for i in range(len(formatacao)): # quantidade de elementos
+
+            for i in range(min(len(formatacao), len(treino))): # quantidade de elementos
                 print(f"{formatacao[i]} {treino[i].strip()}")
             print()
+
+            # imprimir exercícios
+            if len(treino) > 5 and treino[5].strip() != "":
+                listaExercicios = treino[5].split("|")
+                print("Exercícios:")
+                for exercicio in listaExercicios:
+                    print(f"> {exercicio}")                
+            else:
+                print("Sem exercícios cadastrados.")
+            print("- - - - - -")
+            print()
+
         elif opcao == 0:
             return "break"
         else:
-            print()
-            print("Treino não encontrado!")
+            print("\nTreino não encontrado!")
             print()
             return ""
     except ValueError:
-        print()
-        print("Entrada inválida.")
+        print("\nEntrada inválida.")
         print()
         return ""
-
-
-    ## imprimir exercicios
-    exerciciosTreino = treino[5]
-    if exerciciosTreino != "":
-        listaExercicios = exerciciosTreino.split("|")
-        # print
-        print("Exercícios:")
-        for exercicio in listaExercicios:
-            print(f"> {exercicio}")
-    else:
-        print("Sem exercícios cadastrados.")
-    print("- - - - - -")
-    print()
 
 def vincularExercicioTreino(pathExercicios):
     listaExercicios = []
@@ -383,7 +394,7 @@ def vincularExercicioTreino(pathExercicios):
                             print("Opção inválida! Digite 1 ou 0.")
                             print()
                     except ValueError:
-                        print("Entrada inválida!")
+                        print("Entrada inválida! Digite um número!")
                         # print("Entrada inválida! Digite apenas números (1 ou 0).")
                         print()
 
@@ -469,7 +480,7 @@ def editarTreino(pathTreino, arquivoTreino):
                 print("Treino não encontrado")
                 continue
         except ValueError:
-            print("Entrada inválida!")    
+            print("Entrada inválida! Digite um número!")    
             continue
     ## categoria
     while True:
@@ -515,7 +526,7 @@ def editarTreino(pathTreino, arquivoTreino):
                 print()
                 continue      
         except ValueError:
-            print("Entrada inválida!")
+            print("Entrada inválida! Digite um número!")
             print()    
             return ""
         
@@ -547,7 +558,7 @@ def excluirTreino(pathTreino, arquivoTreino):
                 print()
                 return ""        
         except ValueError:
-            print("Entrada inválida!")
+            print("Entrada inválida! Digite um número!")
             print()
             continue
     ## confirmação
@@ -576,12 +587,8 @@ def excluirTreino(pathTreino, arquivoTreino):
                 print()
                 continue
         except ValueError:
-            print("Entrada inválida!")
+            print("Entrada inválida! Digite um número!")
             print()
-        return True
-    else: 
-        print("Sem exercícios cadastrados")
-        return False
 
 # Seção controle de metas  ============================================
 
@@ -590,43 +597,334 @@ pathMetas = "files/metas"
 arquivoMetas = "metas.csv"
 colunasMetas = "tipo,descricao,valorAlvo,valorAtual,unidade\n"
 
-# Inicializar arquivos
-def inicializarMetas():
-    os.makedirs(pathMetas, exist_ok=True)
-    caminho = f"{pathMetas}/{arquivoMetas}"
-    if not os.path.exists(caminho):
-        with open(caminho, "w", encoding='utf-8') as f:
-            f.write(colunasMetas)
+### Metas ###
 
-# ======================================================================
+def menuMeta():
+    try:
+        print("- - - - METAS - - - -")
+        print("1 - Nova meta")
+        print("2 - Ver metas")
+        print("3 - Editar meta")
+        print("4 - Excluir meta")
+        print("5 - Atualizar minhas metas")
+        print("0 - Voltar")
+        print()
+        opcao = int(input("> > Opção: "))
+        if opcao < 0 or opcao > 5:
+            print("> > Opção inválida! Selecione um número entre 0-5.")
+        print()
+        return opcao
+    except ValueError:
+        print("Opção inválida.")
+        print()
 
-def lerMetas():
-    caminho = f"{pathMetas}/{arquivoMetas}"
-    if not os.path.exists(caminho):
-        return []
-    with open(caminho, "r", encoding='utf-8') as f:
-        f.readline()  # pula o cabeçalho
-        linhas = f.readlines()
-    metas = []
-    for linha in linhas:
-        partes = linha.strip().split(",")
-        if len(partes) == 5:
-            metas.append({
-                "tipo":        partes[0],
-                "descricao":   partes[1],
-                "valor_alvo":  float(partes[2]),
-                "valor_atual": float(partes[3]),
-                "unidade":     partes[4]
-            })
-    return metas
- 
-def salvarMetas(metas):
-    caminho = f"{pathMetas}/{arquivoMetas}"
-    with open(caminho, "w", encoding='utf-8') as f:
-        f.write(colunasMetas)
-        for m in metas:
-            linha = f"{m['tipo']},{m['descricao']},{m['valor_alvo']},{m['valor_atual']},{m['unidade']}\n"
-            f.write(linha)
+def listarMetas(path, arquivo):
+
+    # verificação
+    if not os.path.exists(f"{path}/{arquivo}"):
+        print("Nenhuma meta encontrada.")
+        return False
+
+    arquivo = open(f"{path}/{arquivo}", "r", encoding='utf-8')
+    colunas = arquivo.readline()
+    linhas = arquivo.readlines()
+    arquivo.close()
+
+    if not linhas:
+        print("Nenhuma meta registrada!")
+        print()
+        return False
+    else:
+        # print
+        print("Metas")
+        for i, linha in enumerate(linhas, start=1):
+            dados = linha.split(",")
+            print(f"Meta {i} | {dados[1].strip()} ({dados[0].strip()})")
+        print()
+
+def mostrarMeta(path, arquivo):
+    formatacao = ["Tipo:", "Descrição:", "Valor alvo:", "Valor atual:", "Unidade:"]
+
+    arquivo = open(f"{path}/{arquivo}", "r", encoding='utf-8')
+    colunas = arquivo.readline()
+    linhas = arquivo.readlines()
+    arquivo.close()
+
+    try:
+        print(">>> 0 - Sair")
+        opcao = int(input("Qual meta deseja visualizar? "))
+        if opcao <= len(linhas) and opcao > 0:
+            meta = linhas[opcao-1].strip().split(",")
+            print()
+            print("- - - - - -")
+            print(f"- Meta {opcao} -")
+            for i in range(len(formatacao)):
+                print(f"{formatacao[i]} {meta[i].strip()}")
+            # barra de progresso
+            tipo = meta[0].strip()
+            valor_alvo = float(meta[2])
+            valor_atual = float(meta[3])
+            print(f"Progresso: {barraProgresso(valor_atual, valor_alvo, tipo)}")
+            print("- - - - - -")
+            print()
+        elif opcao == 0:
+            return "break"
+        else:
+            print()
+            print("Meta não encontrada!")
+            print()
+            return ""
+    except ValueError:
+        print()
+        print("Entrada inválida.")
+        print()
+        return ""
+
+def tipoMeta():
+    try:
+        print("- - - Tipo de meta - - -")
+        print("1 - Perder peso")
+        print("2 - Ganhar massa muscular")
+        print("3 - Melhorar condicionamento físico")
+        print("4 - Outro")
+        print("0 - Voltar")
+        print()
+        tipo = int(input("Selecione o tipo: "))
+        print()
+        tipos = {
+            1: ("perder peso", "kg"),
+            2: ("ganhar massa", "kg"),
+            3: ("condicionamento", "treinos"),
+            4: ("outro", "")
+        }
+        if tipo in tipos:
+            return tipos[tipo]
+        elif tipo == 0:
+            return 0
+        else:
+            print("Opção inválida")
+            print()
+            return "invalido"
+    except ValueError:
+        print()
+        print("Entrada inválida.")
+        print("Tente novamente ou aperte '0 - Voltar'")
+        print()
+        return "invalido"
+
+def salvarMeta(pathMeta, arquivoMeta, dicionarioMeta):
+# adicionar no .csv
+    dicionarioMeta["valorAlvo"] = str(dicionarioMeta["valorAlvo"]) # conversão float -> string
+    dicionarioMeta["valorAtual"] = str(dicionarioMeta["valorAtual"]) # conversão float -> string
+    colunas = ",".join(list(dicionarioMeta.keys()))+"\n" # transforma a lista de chaves em uma string
+    dados = ",".join(list(dicionarioMeta.values()))+"\n" # valores do dicionário -> string
+
+    while True:
+        try:
+            print("(1 - Sim | 0 - Não)")
+            confirmacao = int(input(f"Deseja salvar a meta '{dicionarioMeta['descricao']}'? "))
+            print()
+            if confirmacao == 1:
+                break
+            elif confirmacao == 0:
+                print("Cancelado! A meta não foi salva.")
+                print()
+                return None
+            else:
+                print("Por favor, insira 1 ou 0!")
+                print()
+        except ValueError:
+            print("Ops! Opção inválida.")
+            print()
+            continue
+
+    if os.path.exists(f"{pathMeta}/{arquivoMeta}"): # adiciona
+        arquivo = open(f"{pathMeta}/{arquivoMeta}", "a", encoding='utf-8')
+        arquivo.write(dados)
+        arquivo.close()
+    else: # se não existe, cria (com etiquetas)
+        arquivo = open(f"{pathMeta}/{arquivoMeta}", "w", encoding='utf-8')
+        arquivo.write(colunas)
+        arquivo.write(dados)
+        arquivo.close()
+    print("Meta salva!")
+
+def editarMeta(pathMeta, arquivoMeta):
+
+    if not os.path.exists(f"{pathMeta}/{arquivoMeta}"):
+        print("Nenhuma meta cadastrada.")
+        return 0
+
+    arquivo = open(f"{pathMeta}/{arquivoMeta}", "r", encoding='utf-8')
+    colunas = arquivo.readline()
+    linhas = arquivo.readlines()
+    arquivo.close()
+
+    if not linhas:
+        print("Nenhuma meta cadastrada.")
+        return 0
+
+    while True:
+        ## meta
+        try:
+            print(">>> 0 - Voltar")
+            opcao = int(input("Qual meta deseja editar? "))
+            if opcao == 0:
+                return 0
+            if opcao <=(len(linhas)) and opcao > 0:
+                indiceMeta = opcao-1
+                dadosMeta = linhas[indiceMeta].strip().split(",")
+                formatacao = ["Tipo:", "Descrição:", "Valor alvo:", "Valor atual:", "Unidade:"]
+                print("\nCampos editáveis:")
+                for i in range(len(formatacao)):
+                    print(f"{i+1} | {formatacao[i]} {dadosMeta[i].strip()}")
+                break
+            else:
+                print("Meta não encontrada")
+                continue
+        except ValueError:
+            print("Entrada inválida! Digite um número!")
+            continue
+    ## campo
+    while True:
+        print()
+        try:
+            print(">>> 0 - Sair")
+            itemEdicao = int(input("Qual campo deseja editar? "))
+
+            if itemEdicao == 0:
+                print("Edição cancelada.\n")
+                return ""
+            
+            if itemEdicao <= len(dadosMeta) and itemEdicao > 0:
+                indiceDado = itemEdicao-1
+
+                # bloquear campos fixos
+                if indiceDado == 0:
+                    print("Não é possível alterar o tipo da meta!")
+                    # print()
+                    continue
+                elif indiceDado == 4:
+                    print("Não é possível alterar unidades!")
+                    # print()
+                    continue
+
+                
+                if indiceDado in [2, 3]:  # valorAlvo ou valorAtual (float)
+                    novaInformacao = float(input(f"- {formatacao[indiceDado]} "))
+                    if novaInformacao < 0:
+                        print("Valores numéricos não podem ser negativos!")
+                        continue
+                else:
+                    novaInformacao = input(f"- {formatacao[indiceDado]} ").capitalize()
+
+                # validações
+                tipo = dadosMeta[0].strip()
+                valor_alvo = novaInformacao if indiceDado == 2 else float(dadosMeta[2])
+                valor_atual = novaInformacao if indiceDado == 3 else float(dadosMeta[3])
+
+                if indiceDado == 2:  # editando valor alvo
+                    if tipo == "perder peso" and  valor_atual < valor_alvo:
+                            print("Erro")
+                            print("O valor alvo não pode ser maior que o valor atual!")
+                            print("(Para perder peso, a meta precisa estar abaixo do peso atual.)")
+                            print()
+                            continue
+                    elif tipo == "ganhar massa" and valor_atual > valor_alvo:
+                            print("Erro")
+                            print("O valor alvo não pode ser menor que o valor atual!")
+                            print("(Para ganhar massa, a meta precisa estar acima do peso atual.)")
+                            print()
+                            continue
+                    
+                dadosMeta[indiceDado] = str(novaInformacao)
+                break
+            else:
+                print("Opção inválida!")
+        except ValueError:
+            print("Entrada inválida! Digite o formato correto.")
+
+    try:
+        print()
+        print("(1 - Sim | 0 - Não)")
+        confirmacao = int(input("Você confirma as alterações? "))
+        
+        if confirmacao == 1:
+            linhas[indiceMeta] = ",".join(dadosMeta) + "\n"
+            arquivo = open(f"{pathMeta}/{arquivoMeta}", "w", encoding='utf-8')
+            arquivo.write(colunas)
+            for linha in linhas:
+                arquivo.write(linha)
+            arquivo.close()
+            # print()
+            print("Edições aplicadas com sucesso!")
+        elif confirmacao == 0:
+            print("Edições descartadas.")
+    except ValueError:
+        print("Entrada inválida!")
+    print()
+    return ""
+
+def excluirMeta(pathMeta, arquivoMeta):
+    arquivo = open(f"{pathMeta}/{arquivoMeta}", "r", encoding='utf-8')
+    colunas = arquivo.readline()
+    linhas = arquivo.readlines()
+    arquivo.close()
+    while True:
+        try:
+            print(">>> 0 - Sair")
+            opcao = int(input("Qual meta deseja excluir? "))
+            indiceMeta = opcao-1
+            formatacao = ["Tipo:", "Descrição:", "Valor alvo:", "Valor atual:", "Unidade:"]
+            if opcao <= len(linhas) and opcao > 0:
+                meta = linhas[indiceMeta].split(",")
+                print()
+                print("- - -")
+                for i in range(5): # quantidade de elementos
+                    print(f"{formatacao[i]} {meta[i].strip()}")
+                print("- - -")
+                print()
+                break
+            elif opcao == 0:
+                print()
+                return 0
+            else:
+                print("Opção inválida")
+                print()
+                return ""
+        except ValueError:
+            print("Entrada inválida! Digite um número!")
+            print()
+            continue
+    ## confirmação
+    while True:
+        try:
+            print("(1 - Sim | 0 - Não)")
+            confirmacao = int(input(f"Tem certeza que deseja apagar a Meta {opcao}? "))
+            print()
+            if confirmacao == 1:
+                linhas.pop(indiceMeta)
+
+                arquivo = open(f"{pathMeta}/{arquivoMeta}", "w", encoding='utf-8')
+                arquivo.write(colunas)
+                for i in range(len(linhas)):
+                    arquivo.write(linhas[i])
+                arquivo.close()
+                print("A meta foi deletada!")
+                print()
+                return ""
+            elif confirmacao == 0:
+                print("Cancelado!\nA meta não foi deletada!")
+                print()
+                return ""
+            else:
+                print("Opção inválida!")
+                print()
+                continue
+        except ValueError:
+            print("Entrada inválida! Digite um número!")
+            print()
+        return True
 
 def barraProgresso(atual, alvo, tipo, tamanho=20):
     # Calcula e exibe a barra de progresso conforme o tipo de meta.
@@ -639,146 +937,82 @@ def barraProgresso(atual, alvo, tipo, tamanho=20):
         # metas de ganho: progresso = atual / alvo
         progresso = atual / alvo if alvo > 0 else 0
         progresso = min(progresso, 1.0)
- 
+
     feito = int(progresso * tamanho)
     barra = "█" * feito + "░" * (tamanho - feito) # barrinha do progresso
     return f"[{barra}] {progresso*100:.1f}%"
 
-# manipulação e inputs
- 
-def exibirMeta(i, dicionario):
-    print(f"\n  Meta {i+1}")
-    print(f"  Tipo:      {dicionario['tipo'].capitalize()}")
-    print(f"  Descrição: {dicionario['descricao']}")
-    print(f"  Alvo:      {dicionario['valor_alvo']} {dicionario['unidade']}")
-    print(f"  Atual:     {dicionario['valor_atual']} {dicionario['unidade']}")
-    print(f"  Progresso: {barraProgresso(dicionario['valor_atual'], dicionario['valor_alvo'], dicionario['tipo'])}")
- 
-def menuTipoMeta():
-    print(" Tipo de meta:")
-    print(" 1 - Perder peso")
-    print(" 2 - Ganhar massa muscular")
-    print(" 3 - Melhorar condicionamento físico")
-    print(" 4 - Outro")
-    opcao = int(input("> Opção: "))
-    print()
-    tipos = {
-        1: ("perder peso", "kg"),
-        2: ("ganhar massa", "kg"),
-        3: ("condicionamento", "treinos"),
-        4: ("outro", "")
-    }
-    if opcao in tipos:
-        return tipos[opcao]
-    return ("outro", "")
-
-# ===============================================================
-# REVISAR
-
-def visualizarMetas():
-    metas = lerMetas()
-    if not metas:
-        print("Nenhuma meta cadastrada.")
+def atualizarProgressoMeta(pathMeta, arquivoMeta):
+    # verificação
+    if not os.path.exists(f"{pathMeta}/{arquivoMeta}"):
+        print("Nenhuma meta encontrada.")
+        print()
         return
-    print(f"\n  {'='*40}")
-    print("  SUAS METAS")
-    print(f"  {'='*40}")
-    for i, m in enumerate(metas):
-        exibirMeta(i, m)
-    print()
- 
-def adicionarMeta():
-    print("\n  - Adicionar nova meta -")
-    print()
-    try:
-        tipo, unidade_padrao = menuTipoMeta()
-        descricao = input("  Descrição da meta: ").capitalize()
-        valor_alvo = float(input(f"  Valor alvo ({unidade_padrao if unidade_padrao else 'unidade'}): "))
-        valor_atual = float(input(f"  Valor atual ({unidade_padrao if unidade_padrao else 'unidade'}): "))
-        print()
-        if tipo == "perder peso":
-            if valor_atual < valor_alvo:
-                print("  Valores incorretos.")
-                print()
-                return ""
-        elif tipo == "ganhar massa":
-            if valor_atual > valor_alvo:
-                print("  Valores incorretos.")
-                print()
-                return ""
 
-        if not unidade_padrao:
-            unidade = input("Unidade (ex: kg, km, min): ")
-        else:
-            unidade = unidade_padrao
- 
-        nova_meta = {
-            "tipo":        tipo,
-            "descricao":   descricao,
-            "valor_alvo":  valor_alvo,
-            "valor_atual": valor_atual,
-            "unidade":     unidade
-        }
- 
-        metas = lerMetas()
-        metas.append(nova_meta)
-        salvarMetas(metas)
-        print("\nMeta adicionada com sucesso!")
-        exibirMeta(len(metas)-1, nova_meta)
- 
-    except ValueError:
+    arquivo = open(f"{pathMeta}/{arquivoMeta}", "r", encoding='utf-8')
+    colunas = arquivo.readline()
+    linhas = arquivo.readlines()
+    arquivo.close()
+
+    if not linhas:
+        print("Nenhuma meta registrada!")
         print()
-        print("Entrada inválida. Tente novamente.")
-        print()
-def editarMeta():
-    metas = lerMetas()
-    if not metas:
-        print("Nenhuma meta cadastrada.")
         return
- 
-    print("\n  - Editar meta - ")
-    for i, m in enumerate(metas):
-        exibirMeta(i, m)
- 
-    try:
-        opcao = int(input("\n  Qual meta deseja editar? (0 para voltar): "))
-        if opcao == 0:
-            return
-        if opcao < 1 or opcao > len(metas):
-            print("  Opção inválida.")
-            return
- 
-        m = metas[opcao - 1]
-        print(f"\n  Editando: {m['descricao']}")
-        print("  1 - Atualizar valor atual (registrar progresso)")
-        print("  2 - Editar valor alvo")
-        print("  3 - Editar descrição")
-        print("  0 - Voltar")
- 
-        sub = int(input("  > Opção: "))
- 
-        if sub == 1:
-            novo = float(input(f"  Novo valor atual ({m['unidade']}): "))
-            metas[opcao - 1]["valor_atual"] = novo
-            salvarMetas(metas)
-            print("\n  Progresso atualizado!")
-            exibirMeta(opcao - 1, metas[opcao - 1])
- 
-        elif sub == 2:
-            novo = float(input(f"  Novo valor alvo ({m['unidade']}): "))
-            metas[opcao - 1]["valor_alvo"] = novo
-            salvarMetas(metas)
-            print("  Valor alvo atualizado!")
- 
-        elif sub == 3:
-            nova = input("  Nova descrição: ").capitalize()
-            metas[opcao - 1]["descricao"] = nova
-            salvarMetas(metas)
-            print("  Descrição atualizada!")
- 
-    except ValueError:
-        print("  Entrada inválida.")
- 
+
+    # exibe a lista
+    print()
+    print("\n--- Suas Metas ---")
+    for i, linha in enumerate(linhas, start=1):
+        dados = linha.split(",")
+        print(f"{i} | {dados[1].strip()} ({dados[0].strip()}) - Atual: {dados[3].strip()} {dados[4].strip()} / Alvo: {dados[2].strip()} {dados[4].strip()}")
+    print()
+
+    while True:
+        try:
+            print(">>> 0 - Sair")
+            opcao = int(input("Qual meta deseja atualizar o progresso rápido? "))
+
+            if opcao == 0:
+                return
+            if 1 <= opcao <= len(linhas):
+                indiceMeta = opcao - 1
+                dadosMeta = linhas[indiceMeta].strip().split(",")
+
+                tipo = dadosMeta[0].strip()
+                descricao = dadosMeta[1].strip()
+                valor_alvo = float(dadosMeta[2])
+                unidade = dadosMeta[4].strip()
+
+                novo_valor = float(input(f"Digite o NOVO valor atual para '{descricao}' ({unidade}): "))
+                if novo_valor < 0:
+                    print("O valor não pode ser negativo!")
+                    continue
+
+                if tipo == "perder peso" and novo_valor < valor_alvo:
+                    print("Parabéns! Esse valor ultrapassa seu objetivo. Meta batida!")
+                elif tipo == "ganhar massa" and novo_valor > valor_alvo:
+                    print("Parabéns! Esse valor ultrapassa seu objetivo de ganho. Meta batida!")
+
+                print("\n(1 - Confirmar | 0 - Cancelar)")
+                conf = int(input("Confirmar atualização rápido? "))
+                if conf == 1:
+                    dadosMeta[3] = str(novo_valor)
+                    linhas[indiceMeta] = ",".join(dadosMeta) + "\n"
+
+                    arquivo = open(f"{pathMeta}/{arquivoMeta}", "w", encoding='utf-8')
+                    arquivo.write(colunas)
+                    for linha in linhas:
+                        arquivo.write(linha)
+                    arquivo.close()
+                    print("Progresso atualizado com sucesso!\n")
+                    return
+                else:
+                    print("Atualização cancelada.\n")
+                    return
+            else:
+                print("Opção inválida.")
+        except ValueError:
+            print("Entrada inválida. Digite apenas números.")
 
 # ===============================================================
 # Seção de Evolução (opção 4)
@@ -894,7 +1128,23 @@ def calcularFrequenciaSemanal(registros):
 def verEvolucao():
     inicializarEvolucao()
     registros = lerRegistros()
-    metas = lerMetas()
+
+    # ler metas diretamente do CSV (padrão Treinos)
+    caminhoMetas = f"{pathMetas}/{arquivoMetas}"
+    metas = []
+    if os.path.exists(caminhoMetas):
+        with open(caminhoMetas, "r", encoding='utf-8') as f:
+            f.readline()  # pula cabeçalho
+            for linha in f.readlines():
+                partes = linha.strip().split(",")
+                if len(partes) == 5:
+                    metas.append({
+                        "tipo":        partes[0],
+                        "descricao":   partes[1],
+                        "valor_alvo":  float(partes[2]),
+                        "valor_atual": float(partes[3]),
+                        "unidade":     partes[4]
+                    })
 
     print(f"\n  {'='*40}")
     print("  EVOLUÇÃO")
