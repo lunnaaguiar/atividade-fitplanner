@@ -1,6 +1,8 @@
 # THE FITPLANNER!!
 *CESAR School CC 1B*  
+GRUPO 06
 ﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌﹌  
+github: https://github.com/lunnaaguiar/atividade-fitplanner.git  
 
 ₊⊹  INICIANDO O PROGRAMA: ₊⊹  
 ⏔⏔⏔⏔⏔⏔ ꒰ ᧔ෆ᧓ ꒱ ⏔⏔⏔⏔⏔⏔  
@@ -92,4 +94,12 @@ Dicas de nutrição personalizadas por objetivo (perda de peso, ganho de massa o
 
 ₊⊹  7 -    RESET       ₊⊹  
 ⏔⏔⏔⏔⏔⏔ ꒰ ᧔ෆ᧓ ꒱ ⏔⏔⏔⏔⏔⏔ 
-*Destinado para caso você queira remover todas as informações salvas. Todos os arquivos serão resetados ao padrão inicial.
+*Destinado para caso você queira remover todas as informações salvas. Todos os arquivos serão resetados ao padrão inicial.  
+
+===============================
+Pedro Correia Antunes  
+Pedro Pinheiro  
+Luiz Eduardo  
+Lunna de Aguiar Mendonça Morelato Moreno  
+Sofia Carolina  
+Matheus Raulino de Souza Moreira  
