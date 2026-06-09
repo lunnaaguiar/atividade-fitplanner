@@ -12,6 +12,7 @@ def inicializarArquivos():
     os.makedirs(pathExercicios, exist_ok=True)
     os.makedirs(pathMetas, exist_ok=True)
     os.makedirs("files/evolucao", exist_ok=True)
+
     for nome in ["cardio.txt", "forca.txt", "flexibilidade.txt", "equilibrio.txt"]:
         caminho = f"{pathExercicios}/{nome}"
         if not os.path.exists(caminho):
