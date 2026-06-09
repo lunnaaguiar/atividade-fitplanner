@@ -244,7 +244,7 @@ while True:
                     if deletar == 0:
                         break
             elif opcaoMeta == 5:
-                print("Função de atualização aqui!!")
+                atualizarProgressoMeta(pathMetas, arquivoMetas)
                 
             elif opcaoMeta == 0: # sair
                 break
