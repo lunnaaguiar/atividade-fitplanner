@@ -71,7 +71,7 @@ Mostra um relatório completo: total de treinos, duração total e média, frequ
 Informe a data (dd/mm/aaaa) ou pressione Enter para usar a data de hoje, o nome do treino e a duração em minutos. O registro é salvo no histórico.  
 *Importante: registrar aqui é diferente de criar um treino no menu 1. Aqui você marca que fez um treino naquele dia.*
 
-₊⊹  4 -    SUGESTÕES       ₊⊹  
+₊⊹  5 -    SUGESTÕES       ₊⊹  
 ⏔⏔⏔⏔⏔⏔ ꒰ ᧔ෆ᧓ ꒱ ⏔⏔⏔⏔⏔⏔  
 
 1. **Sugestão de treino semanal**  
